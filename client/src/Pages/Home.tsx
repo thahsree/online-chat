@@ -13,6 +13,7 @@ const Home = () => {
         backgroundImage: "url('/background.jpg')",
         backgroundPosition: "center",
         backgroundSize: "cover",
+        objectFit: "contain",
       }}
     >
       {/* Blur Overlay */}
@@ -31,18 +32,18 @@ const Home = () => {
       {/* Content */}
       <div className="flex w-[500px] flex-col gap-5 relative z-10 ">
         {/* Header */}
-        <div className="flex items-center p-3 bg-[#373a4359] w-[100%] border-[1px] border-gray-600 rounded-lg justify-center">
+        <div className="flex items-center p-3 bg-[#373a43a9] w-[100%] border-[1px] border-gray-600 rounded-lg justify-center">
           <h3 className="text-4xl font-light font-mono text-white text-center">
             CHIT CHAT
           </h3>
         </div>
 
         {/* Tabs Section */}
-        <div className="bg-[#373a4359] p-3 w-[100%] rounded-lg flex flex-col gap-4 border border-gray-600">
+        <div className="bg-[#373a43a9] p-3 w-[100%] rounded-lg flex flex-col gap-4 border border-gray-600">
           <div className="flex w-full justify-between gap-2">
             <div
               onClick={() => setIsActive("login")}
-              className={`text-black flex-1 text-center border border-transparent rounded-full cursor-pointer py-2 ${
+              className={`text-black font-semibold flex-1 text-center border border-transparent rounded-full cursor-pointer py-2 ${
                 isActive === "login" ? "bg-blue-200 text-black" : "text-white"
               }`}
             >
@@ -50,7 +51,7 @@ const Home = () => {
             </div>
             <div
               onClick={() => setIsActive("signup")}
-              className={`text-black flex-1 text-center border border-transparent rounded-full cursor-pointer py-2 ${
+              className={`text-black font-semibold flex-1 text-center border border-transparent rounded-full cursor-pointer py-2 ${
                 isActive === "signup" ? "bg-blue-200 text-black" : "text-white"
               }`}
             >
@@ -59,7 +60,11 @@ const Home = () => {
           </div>
 
           <div className="w-full p-1">
-            {isActive === "login" ? <Login /> : <Signup />}
+            {isActive === "signup" ? (
+              <Signup setIsActive={setIsActive} />
+            ) : (
+              <Login />
+            )}
           </div>
         </div>
       </div>

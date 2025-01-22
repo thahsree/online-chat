@@ -19,9 +19,10 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "password incorrect" });
     }
 
+    const { password, ...userData } = foundUser.Object();
     return res.status(200).json({
       message: "user logged in",
-      foundUser,
+      userData,
       token: generateToken(foundUser._id),
     });
   } catch (error) {}
