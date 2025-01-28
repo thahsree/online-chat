@@ -15,7 +15,8 @@ app.get("/", (req, res) => {
   res.send("HELLO WORLD");
 });
 
-app.use("/api/user", require("./routes/userRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/chats", require("./routes/chatRoute"));
 
 const PORT = process.env.PORT || 5555;
 app.listen(PORT, () => {

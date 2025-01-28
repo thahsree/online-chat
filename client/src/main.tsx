@@ -6,11 +6,13 @@ import "./index.css";
 import Chats from "./Pages/Chats.tsx";
 import Error from "./Pages/Error.tsx";
 import Home from "./Pages/Home.tsx";
+import Root from "./Root/Root.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     errorElement: <></>,
+    element: <Root />,
     children: [
       {
         path: "/",

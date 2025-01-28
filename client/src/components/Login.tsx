@@ -25,7 +25,7 @@ const Login = () => {
       }
       const PORT = import.meta.env.VITE_BASE_URL;
 
-      const res = await axios.post(`${PORT}/api/user/login`, formData);
+      const res = await axios.post(`${PORT}/api/users/login`, formData);
       console.log("response", res);
       alert("user logged in");
     } catch (error) {

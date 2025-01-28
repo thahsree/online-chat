@@ -3,8 +3,8 @@ const User = require("../model/userModel");
 const bcrypt = require("bcrypt");
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
   try {
+    const { email, password: reqPassword } = req.body;
     const foundUser = await User.findOne({ email });
 
     if (!foundUser) {
@@ -13,13 +13,14 @@ const login = async (req, res) => {
         .json({ message: "Email not found. Please signup first" });
     }
 
-    const match = await bcrypt.compare(password, foundUser.password);
+    const match = await bcrypt.compare(reqPassword, foundUser.password);
 
     if (!match) {
       return res.status(401).json({ message: "password incorrect" });
     }
 
-    const { password, ...userData } = foundUser.Object();
+    const { password, ...userData } = foundUser;
+
     return res.status(200).json({
       message: "user logged in",
       userData,
@@ -57,7 +58,24 @@ const register = async (req, res) => {
 };
 
 const getUsers = async (req, res) => {
-  return res.status(200).json({ message: "OK" });
+  console.log("reached");
+  try {
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+    console.log(users);
+    res.send(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "internal server error" });
+  }
 };
 
 module.exports = { login, register, getUsers };

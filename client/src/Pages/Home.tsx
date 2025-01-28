@@ -6,29 +6,7 @@ const Home = () => {
   const [isActive, setIsActive] = useState("login");
 
   return (
-    <div
-      className="w-[100vw] h-[100vh] flex pt-6 justify-center"
-      style={{
-        position: "relative",
-        backgroundImage: "url('/background.jpg')",
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-        objectFit: "contain",
-      }}
-    >
-      {/* Blur Overlay */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backdropFilter: "blur(10px)", // Adjust blur intensity here
-          zIndex: 0,
-        }}
-      ></div>
-
+    <div className="w-[100vw] h-[100vh] flex pt-6 justify-center">
       {/* Content */}
       <div className="flex w-[500px] flex-col gap-5 relative z-10 ">
         {/* Header */}

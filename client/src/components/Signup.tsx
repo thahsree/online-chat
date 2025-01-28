@@ -50,7 +50,7 @@ const Signup: React.FC<MyComponentProps> = ({ setIsActive }) => {
         password: formData.password,
       };
 
-      const res = await axios.post(`${PORT}/api/user/register`, dataToSend);
+      const res = await axios.post(`${PORT}/api/users/register`, dataToSend);
 
       console.log("Response", res);
       alert("Signup completed");
