@@ -4,8 +4,8 @@ const { verifyToken } = require("../middlewares/verifyJWT");
 
 const router = express.Router();
 
-router.get("/", verifyToken, getUsers);
 
+router.get("/", verifyToken, getUsers);
 router.post("/login", login);
 
 router.post("/register", register);

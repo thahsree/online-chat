@@ -139,14 +139,12 @@ const renameGroup = async (req, res) => {
 };
 
 const addToGroup = async (req, res) => {
-  console.log("reached add to group");
   try {
     const { userId, chatId } = req.body;
     const isUserInGroup = await Chat.findById(chatId, {
       users: { $elemMatch: { $eq: { _id: userId } } },
     });
 
-    console.log(isUserInGroup.users.length, "is user in group");
     if (isUserInGroup.users.length > 0) {
       return res.status(409).json({ message: "user alredy exist in group" });
     }

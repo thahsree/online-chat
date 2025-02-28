@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -7,6 +8,7 @@ const Login = () => {
     password: "",
   });
   const [showPass, setShowPass] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -25,10 +27,15 @@ const Login = () => {
       }
       const PORT = import.meta.env.VITE_BASE_URL;
 
-      const res = await axios.post(`${PORT}/api/users/login`, formData);
+      const res = await axios.post(`${PORT}/users/login`, formData);
       console.log("response", res);
+      localStorage.setItem("userCredentials", res.data.token);
+
+      //Add toast
       alert("user logged in");
-    } catch (error) {
+      navigate("/chats");
+    } catch (error: any) {
+      alert(error.response.data.message);
       console.log(error);
     }
   };

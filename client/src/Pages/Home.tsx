@@ -1,9 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
 
 const Home = () => {
   const [isActive, setIsActive] = useState("login");
+
+  const isUser = localStorage.getItem("userCredentials");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isUser) {
+      navigate("/chats");
+    }
+  }, [isUser]);
 
   return (
     <div className="w-[100vw] h-[100vh] flex pt-6 justify-center">

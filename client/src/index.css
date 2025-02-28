@@ -18,3 +18,23 @@ input[type=password]::-ms-clear
 {
     display: none;
 }
+
+.sidebar{
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #3B3C36;
+  color:black;
+  font-weight: 500;
+}
+.bg{
+
+  position:fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width:100%;
+  background-color: gray;
+}
