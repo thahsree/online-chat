@@ -7,7 +7,9 @@ import UsersListSideBar from "../components/UsersListSideBar";
 
 const Chats = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
-
+  const [showProfile, setShowProfile] = useState<boolean>(false);
+  const [currentChat, setCurrentChat] = useState<string>("");
+  const [otherUser, setOtherUser] = useState<string>("");
   return (
     <div className="relative w-full h-full">
       <div className="flex bg-[#2c2a2a] w-full h-[70px] items-center justify-center px-5 border-b border-[#565555cb]">
@@ -15,7 +17,10 @@ const Chats = () => {
           CHIT CHAT
         </h3>
       </div>
-      <div className="absolute top-[25px] right-[30px]">
+      <div
+        onClick={() => setShowProfile((prev) => !prev)}
+        className="absolute top-[25px] right-[30px]"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 402.161 402.161"
@@ -27,11 +32,15 @@ const Chats = () => {
           </g>
         </svg>
       </div>
-      <Profile />
+      {showProfile && <Profile />}
       <div className="flex w-full" style={{ height: "calc(100vh - 70px)" }}>
-        <UsersListSideBar setShowModal={setShowModal} />
+        <UsersListSideBar
+          setShowModal={setShowModal}
+          setCurrentChat={setCurrentChat}
+          setOtherUser={setOtherUser}
+        />
 
-        <Chatpage />
+        <Chatpage currentChat={currentChat} otherUser={otherUser} />
       </div>
 
       {showModal && (

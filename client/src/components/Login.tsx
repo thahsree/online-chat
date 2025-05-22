@@ -29,7 +29,10 @@ const Login = () => {
 
       const res = await axios.post(`${PORT}/users/login`, formData);
       console.log("response", res);
-      localStorage.setItem("userCredentials", res.data.token);
+      const loggedUser = res.data.userData._doc;
+      const { password, ...userDataWithNoPass } = loggedUser;
+      localStorage.setItem("userCredentials", JSON.stringify(res.data.token));
+      localStorage.setItem("loggedUser", JSON.stringify(userDataWithNoPass));
 
       //Add toast
       alert("user logged in");

@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import RequireAuth from "./components/RequireAuth.tsx";
 import { Provider } from "./components/ui/provider.tsx";
 import "./index.css";
 import Chats from "./Pages/Chats.tsx";
@@ -21,7 +22,14 @@ const router = createBrowserRouter([
       {
         path: "/chats",
         errorElement: <Error />,
-        element: <Chats />,
+        element: <RequireAuth />,
+        children: [
+          {
+            path: "/chats",
+            errorElement: <Error />,
+            element: <Chats />,
+          },
+        ],
       },
     ],
   },

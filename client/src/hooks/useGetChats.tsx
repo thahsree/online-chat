@@ -3,7 +3,7 @@ import axios from "axios";
 
 const useGetChats = () => {
   const PORT = import.meta.env.VITE_BASE_URL;
-  const token = localStorage.getItem("userCredentials");
+  const token = JSON.parse(localStorage.getItem("userCredentials") || "");
 
   return useQuery({
     queryKey: ["chats"],
