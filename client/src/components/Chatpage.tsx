@@ -127,7 +127,7 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
 
   return (
     <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-end py-2 px-5 overflow-hidden">
-      <div className="overflow-y-scroll">
+      <div className="overflow-auto">
         {chatData?.chatName === "sender" ? (
           <SenderUI cachedData={chatData} />
         ) : chatData?.chatName.length > 1 ? (

@@ -61,8 +61,8 @@ function UsersListSideBar({
   };
 
   return (
-    <>
-      <div className="w-[35%] flex items-center flex-col px-5 bg-[#2c2a2a6d]  ">
+    <div className="flex flex-col justify-between w-[35%] bg-[#2c2a2a6d] ">
+      <div className="w-full flex items-center flex-col px-5 ">
         {/* heading */}
         <div className="flex justify-between w-full py-4 items-center">
           <div>My Chats</div>
@@ -73,7 +73,7 @@ function UsersListSideBar({
             New Group Chat
           </div>
         </div>
-        <ul className="w-full flex flex-col gap-2 mt-3">
+        <ul className="w-full flex flex-col gap-2 mt-3 ">
           {data ? (
             <>
               {data.map((item: any, index: number) => {
@@ -108,7 +108,15 @@ function UsersListSideBar({
           )}
         </ul>
       </div>
-    </>
+      <div className="p-5 flex items-center">
+        <div className="w-full flex gap-2 p-3 bg-[#2c2a2a] text-center items-center justify-center">
+          <div className="w-[25px] h-[25px]">
+            <img src="/global.svg" alt="" className="w-full h-full" />
+          </div>
+          <p>find random users</p>
+        </div>
+      </div>
+    </div>
   );
 }
 
