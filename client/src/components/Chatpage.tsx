@@ -92,7 +92,7 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
         messages: [...(prev?.messages || []), newMessageReceived],
       }));
 
-      // ✅ update cache for consistency
+      // update cache for consistency
       queryClient.setQueryData(["messages", currentChat], (old: any) => ({
         ...old,
         messages: [...(old?.messages || []), newMessageReceived],
@@ -120,13 +120,13 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
   if (!chatData) {
     return (
       <div className="w-full bg-[#2c2a2a] flex flex-col justify-center items-center py-2 px-5">
-        no data found
+        No Data Found
       </div>
     );
   }
 
   return (
-    <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-end py-2 px-5 overflow-hidden">
+    <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-end py-2 px-5 overflow-hidden ">
       <div className="overflow-auto">
         {chatData?.chatName === "sender" ? (
           <SenderUI cachedData={chatData} />

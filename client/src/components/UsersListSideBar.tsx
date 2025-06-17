@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
 import useGetChats from "../hooks/useGetChats";
+import Loading from "./Loading";
 
 interface Props {
   setShowModal: (value: any) => void;
@@ -61,7 +62,7 @@ function UsersListSideBar({
   };
 
   return (
-    <div className="flex flex-col justify-between w-[35%] bg-[#2c2a2a6d] ">
+    <div className="flex flex-col justify-between w-[35%] bg-[#2c2a2a6d]">
       <div className="w-full flex items-center flex-col px-5 ">
         {/* heading */}
         <div className="flex justify-between w-full py-4 items-center">
@@ -102,7 +103,7 @@ function UsersListSideBar({
               })}
             </>
           ) : isLoading ? (
-            <p>LOADING</p>
+            <Loading type="sidebar" />
           ) : (
             ""
           )}
@@ -113,7 +114,7 @@ function UsersListSideBar({
           <div className="w-[25px] h-[25px]">
             <img src="/global.svg" alt="" className="w-full h-full" />
           </div>
-          <p>find random users</p>
+          <p>Find Users</p>
         </div>
       </div>
     </div>
