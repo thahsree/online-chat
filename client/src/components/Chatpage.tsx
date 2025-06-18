@@ -21,6 +21,7 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
 
   const [message, setMessage] = useState<string>("");
   const socketRef = useRef<any>(null);
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   const handleSendMessage = async (e: any) => {
     if (e.key == "Enter" || e.keycode == 13 || e.type == "click") {
@@ -85,6 +86,7 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
     user && socketRef.current.emit("setup", user?._id);
   }, []);
 
+  // message handling from socket.io
   useEffect(() => {
     socketRef.current.on("message received", (newMessageReceived: any) => {
       setChatData((prev: any) => ({
@@ -117,6 +119,12 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
     return () => unsubscribe(); // Cleanup on unmount
   }, [currentChat, queryClient]);
 
+  // widow scroll down
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView();
+    }
+  }, [chatData?.messages]);
   if (!chatData) {
     return (
       <div className="w-full bg-[#2c2a2a] flex flex-col justify-center items-center py-2 px-5">
@@ -126,7 +134,7 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
   }
 
   return (
-    <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-end py-2 px-5 overflow-hidden ">
+    <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-end py-2 px-5 overflow-hidden">
       <div className="overflow-auto">
         {chatData?.chatName === "sender" ? (
           <SenderUI cachedData={chatData} />
@@ -135,6 +143,7 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
         ) : (
           <p>Loading...</p>
         )}
+        <div ref={chatEndRef} />
       </div>
       <div className=" bg-[#484343b5] relative">
         <input
