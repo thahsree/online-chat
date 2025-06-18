@@ -15,6 +15,7 @@ const useGetChats = () => {
           },
         });
 
+        console.log("RESPONSE", res.data);
         return res.data;
       }
     },

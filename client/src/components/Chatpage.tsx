@@ -52,7 +52,7 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
         alert("failed to send");
       } else {
         const newData = {
-          sender: user._id,
+          sender: { _id: user._id },
           content: message,
           updatedAt: new Date(),
           chat: {

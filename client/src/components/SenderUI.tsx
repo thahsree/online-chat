@@ -11,12 +11,12 @@ export const SenderUI = ({ cachedData }: Props) => {
         <li
           key={index}
           className={`flex gap-3 ${
-            item.sender === user?._id ? "self-end" : "self-start"
+            item.sender._id === user?._id ? "self-end" : "self-start"
           } `}
         >
           <div
             className={`p-1 px-2 text-black ${
-              item.sender === user?._id
+              item.sender._id === user?._id
                 ? "rounded-es-xl rounded-ss-xl rounded-ee-xl  bg-slate-500 text-white"
                 : "rounded-e-xl rounded-es-xl dark:bg-gray-300"
             } border border-none `}

@@ -35,15 +35,14 @@ const sendMessage = async (req, res) => {
     var message = await Message.create(newMessage);
 
     // use of execPopulate because we are populating instace of mongoose class
-    message = await message.populate("sender", "user");
+    message = await message.populate("sender", "user picture"); //populating sender with userand picture
     message = await message.populate("chat");
     message = await User.populate(message, {
-      path: "chat.users",
+      path: "chat.user",
       select: "userName email picture",
     });
 
-    console.log("Reached");
-
+    //updating latest message.
     await Chat.findByIdAndUpdate(req.body.chatId, {
       latestMessages: message,
     });
@@ -57,13 +56,17 @@ const sendMessage = async (req, res) => {
 const fetchMessage = async (req, res) => {
   try {
     console.log("REACHED  ");
-    const chat = await Message.find({ chat: req.params.chatId });
+    const chat = await Message.find({ chat: req.params.chatId }).populate(
+      "sender"
+    );
 
     if (!chat) {
       return res.status(404).json({
         message: "invalid chatID or chatID not provided",
       });
     }
+
+    console.log(chat, "CHAT");
     return res.status(200).json(chat);
   } catch (error) {
     console.log(error);
