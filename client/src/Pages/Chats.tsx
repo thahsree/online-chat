@@ -11,7 +11,6 @@ const Chats = () => {
   const [showProfile, setShowProfile] = useState<boolean>(false);
   const [currentChat, setCurrentChat] = useState<string>("");
   const [otherUser, setOtherUser] = useState<string>("");
-  const [showMenu, setShowMenu] = useState<boolean>(false);
   return (
     <div className="relative w-full h-full">
       <Navbar setShowProfile={setShowProfile} />

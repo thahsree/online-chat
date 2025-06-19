@@ -5,6 +5,7 @@ import GroupChatUI from "./GroupChatUI";
 import { SenderUI } from "./SenderUI";
 
 import { io } from "socket.io-client";
+import GroupChatNavBar from "./GroupChatNavBar";
 
 interface Props {
   currentChat: string;
@@ -77,8 +78,6 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
     }
   };
 
-  const [ioStatus, setIoStatus] = useState<boolean>();
-
   const PORT = "http://localhost:5555";
   useEffect(() => {
     socketRef.current = io(PORT);
@@ -134,31 +133,36 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
   }
 
   return (
-    <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-end py-2 px-5 overflow-hidden">
-      <div className="overflow-auto">
-        {chatData?.chatName === "sender" ? (
-          <SenderUI cachedData={chatData} />
-        ) : chatData?.chatName.length > 1 ? (
-          <GroupChatUI cachedData={chatData} />
-        ) : (
-          <p>Loading...</p>
-        )}
-        <div ref={chatEndRef} />
-      </div>
-      <div className=" bg-[#484343b5] relative">
-        <input
-          className="w-full h-[20px] border border-transparent rounded px-2 py-6 flex items-center"
-          placeholder="type your message"
-          onKeyDown={handleSendMessage}
-          onChange={(e: any) => setMessage(e.target.value)}
-          value={message}
-        />
-        <button
-          className="absolute top-[25%] right-3 border-none outline-none"
-          onClick={handleSendMessage}
-        >
-          <img src="/arrow.svg" alt="arrow" width={25} height={25} />
-        </button>
+    <div className="w-full h-full relative">
+      {chatData?.chatName !== "sender" && (
+        <GroupChatNavBar cachedData={chatData} />
+      )}
+      <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-end py-2 px-5 overflow-hidden">
+        <div className="overflow-auto">
+          {chatData?.chatName === "sender" ? (
+            <SenderUI cachedData={chatData} />
+          ) : chatData?.chatName.length > 1 ? (
+            <GroupChatUI cachedData={chatData} />
+          ) : (
+            <p>Loading...</p>
+          )}
+          <div ref={chatEndRef} />
+        </div>
+        <div className=" bg-[#484343b5] relative">
+          <input
+            className="w-full h-[20px] border border-transparent rounded px-2 py-6 flex items-center"
+            placeholder="type your message"
+            onKeyDown={handleSendMessage}
+            onChange={(e: any) => setMessage(e.target.value)}
+            value={message}
+          />
+          <button
+            className="absolute top-[25%] right-3 border-none outline-none"
+            onClick={handleSendMessage}
+          >
+            <img src="/arrow.svg" alt="arrow" width={25} height={25} />
+          </button>
+        </div>
       </div>
     </div>
   );
