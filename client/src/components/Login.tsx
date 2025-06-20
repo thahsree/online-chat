@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -36,6 +37,9 @@ const Login = () => {
 
       //Add toast
       alert("user logged in");
+
+      const socket = io(PORT);
+      socket.connect();
       navigate("/chats");
     } catch (error: any) {
       alert(error.response.data.message);

@@ -18,7 +18,7 @@ const getAllChats = async (req, res) => {
 
 const sendMessage = async (req, res) => {
   try {
-    const { content, chatId } = req.body;
+    const { content, chatId, receiver } = req.body;
 
     if (!content || !chatId) {
       return res

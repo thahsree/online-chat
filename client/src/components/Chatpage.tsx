@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import GroupChatUI from "./GroupChatUI";
 import { SenderUI } from "./SenderUI";
 
-import { io } from "socket.io-client";
 import GroupChatNavBar from "./GroupChatNavBar";
 
 interface Props {
@@ -21,7 +20,7 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
   const user = JSON.parse(localStorage.getItem("loggedUser") || "{}");
 
   const [message, setMessage] = useState<string>("");
-  const socketRef = useRef<any>(null);
+
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   const handleSendMessage = async (e: any) => {
@@ -42,6 +41,7 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
         {
           content: message,
           chatId: currentChat,
+          receiver: otherUser,
         },
         {
           headers: {
@@ -65,7 +65,7 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
           ...chatData,
           messages: [...chatData.messages, newData],
         });
-        socketRef.current.emit("new message", newData);
+
         queryClient.setQueryData(["messages", currentChat], (oldData: any) => ({
           ...oldData,
           messages: [...oldData.messages, newData],
@@ -77,33 +77,6 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
       }
     }
   };
-
-  const PORT = "http://localhost:5555";
-  useEffect(() => {
-    socketRef.current = io(PORT);
-
-    user && socketRef.current.emit("setup", user?._id);
-  }, []);
-
-  // message handling from socket.io
-  useEffect(() => {
-    socketRef.current.on("message received", (newMessageReceived: any) => {
-      setChatData((prev: any) => ({
-        ...prev,
-        messages: [...(prev?.messages || []), newMessageReceived],
-      }));
-
-      // update cache for consistency
-      queryClient.setQueryData(["messages", currentChat], (old: any) => ({
-        ...old,
-        messages: [...(old?.messages || []), newMessageReceived],
-      }));
-    });
-
-    return () => {
-      socketRef.current.off("message received");
-    };
-  }, [currentChat]);
 
   useEffect(() => {
     if (!currentChat) return;

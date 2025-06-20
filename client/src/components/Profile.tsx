@@ -1,10 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 
 function Profile() {
+  const PORT = import.meta.env.VITE_BASE_URL;
+  const socket = io(PORT, { autoConnect: false });
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("userCredentials");
     localStorage.removeItem("loggedUser");
+    socket.disconnect();
     navigate("/");
   };
   return (

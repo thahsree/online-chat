@@ -12,9 +12,11 @@ function GroupChatUI({ cachedData }: Props) {
           index > 0 &&
           cachedData.messages[index - 1].sender?._id === item.sender?._id;
 
+        console.log(item, "ITEM");
+
         return (
           <li
-            key={item._id}
+            key={index}
             className={`flex gap-3 ${
               item.sender?._id === user?._id ? "self-end" : "self-start"
             } `}
