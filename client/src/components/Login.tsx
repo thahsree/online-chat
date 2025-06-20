@@ -1,7 +1,5 @@
-import axios from "axios";
 import React, { FormEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
+import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +7,7 @@ const Login = () => {
     password: "",
   });
   const [showPass, setShowPass] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const { login, loginStatus } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -21,30 +19,8 @@ const Login = () => {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault();
-      if (!formData.email || !formData.password) {
-        alert("Please add required field");
-      }
-      const PORT = import.meta.env.VITE_BASE_URL;
-
-      const res = await axios.post(`${PORT}/users/login`, formData);
-      console.log("response", res);
-      const loggedUser = res.data.userData._doc;
-      const { password, ...userDataWithNoPass } = loggedUser;
-      localStorage.setItem("userCredentials", JSON.stringify(res.data.token));
-      localStorage.setItem("loggedUser", JSON.stringify(userDataWithNoPass));
-
-      //Add toast
-      alert("user logged in");
-
-      const socket = io(PORT);
-      socket.connect();
-      navigate("/chats");
-    } catch (error: any) {
-      alert(error.response.data.message);
-      console.log(error);
-    }
+    e.preventDefault();
+    login(formData);
   };
   return (
     <div>
@@ -84,7 +60,7 @@ const Login = () => {
         </div>
 
         <button className="border mt-4 bg-blue-600 rounded-lg py-2 border-transparent font-semibold">
-          Login
+          {loginStatus === "pending" ? "Logging In" : "Login"}
         </button>
         <button className="border mt-1 bg-red-600 rounded-lg py-2 border-transparent font-semibold">
           Continue as Guest
