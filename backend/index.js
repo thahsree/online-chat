@@ -2,11 +2,11 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/mongo");
 const cors = require("cors");
-const { app, io, server } = require("./lib/socket");
-
-app.use(express.json());
+const { app, server } = require("./lib/socket");
 
 dotenv.config();
+app.use(express.json());
+// app.use(cookieParser());
 
 connectDB();
 app.use(cors());

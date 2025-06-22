@@ -7,10 +7,9 @@ function GroupChatUI({ cachedData }: Props) {
 
   return (
     <ul className="flex flex-col mb-5 gap-2">
-      {cachedData?.messages.map((item: any, index: number) => {
+      {cachedData?.map((item: any, index: number) => {
         const isSameSenderAsPrevious =
-          index > 0 &&
-          cachedData.messages[index - 1].sender?._id === item.sender?._id;
+          index > 0 && cachedData[index - 1].sender?._id === item.sender?._id;
 
         console.log(item, "ITEM");
 

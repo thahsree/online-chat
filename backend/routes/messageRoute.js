@@ -3,11 +3,12 @@ const { verifyToken } = require("../middlewares/verifyJWT");
 const {
   sendMessage,
   fetchMessage,
+  getAllChats,
 } = require("../controller/messageController");
 
 const router = express.Router();
 
-router.get("/:chatId", verifyToken, fetchMessage);
+router.get("/:chatId", verifyToken, getAllChats);
 
 router.post("/", verifyToken, sendMessage);
 

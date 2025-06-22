@@ -7,7 +7,7 @@ export const SenderUI = ({ cachedData }: Props) => {
 
   return (
     <ul className="flex flex-col mb-5 gap-2">
-      {cachedData?.messages.map((item: any, index: number) => (
+      {cachedData?.map((item: any, index: number) => (
         <li
           key={index}
           className={`flex gap-3 ${

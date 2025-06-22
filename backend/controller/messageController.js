@@ -2,12 +2,14 @@ const Message = require("../model/messageModel");
 const User = require("../model/userModel");
 const Chat = require("../model/chatModel");
 const { fetchChats } = require("./chatController");
+const { getReceiverSocketId } = require("../lib/socket");
+const { io } = require("../lib/socket");
 
 const getAllChats = async (req, res) => {
   try {
     const messages = await Message.find({ chat: req.params.chatId })
-      .populata("sender")
-      .poulate("chat");
+      .populate("sender")
+      .populate("chat");
 
     return res.status(200).json(messages);
   } catch (error) {
@@ -34,6 +36,12 @@ const sendMessage = async (req, res) => {
 
     var message = await Message.create(newMessage);
 
+    const receiverSocketId = getReceiverSocketId(receiver);
+
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
+
     // use of execPopulate because we are populating instace of mongoose class
     message = await message.populate("sender", "user picture"); //populating sender with userand picture
     message = await message.populate("chat");
@@ -55,7 +63,6 @@ const sendMessage = async (req, res) => {
 
 const fetchMessage = async (req, res) => {
   try {
-    console.log("REACHED  ");
     const chat = await Message.find({ chat: req.params.chatId }).populate(
       "sender"
     );
@@ -65,8 +72,6 @@ const fetchMessage = async (req, res) => {
         message: "invalid chatID or chatID not provided",
       });
     }
-
-    console.log(chat, "CHAT");
     return res.status(200).json(chat);
   } catch (error) {
     console.log(error);
