@@ -6,12 +6,14 @@ interface Props {
   setShowModal: (value: any) => void;
   setCurrentChat: React.Dispatch<React.SetStateAction<string>>;
   setOtherUser: React.Dispatch<React.SetStateAction<string>>;
+  setIsGroupChat: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function UsersListSideBar({
   setShowModal,
   setCurrentChat,
   setOtherUser,
+  setIsGroupChat,
 }: Props) {
   const { data, isLoading } = useGetChats();
 
@@ -29,9 +31,14 @@ function UsersListSideBar({
     };
   };
 
-  const accessChat = (chatId: string, otherUserId: string) => {
+  const accessChat = (
+    chatId: string,
+    otherUserId: string,
+    isGroupChat: boolean
+  ) => {
     setCurrentChat(chatId);
     setOtherUser(otherUserId);
+    setIsGroupChat(isGroupChat);
   };
 
   return (
@@ -55,7 +62,7 @@ function UsersListSideBar({
                 <li
                   key={index}
                   className="flex gap-3 bg-[#2c2a2a] p-2 rounded text-sm font-normal items-center"
-                  onClick={() => accessChat(item._id, id)}
+                  onClick={() => accessChat(item._id, id, item.isGroupChat)}
                 >
                   <img
                     src={!item.isGroupChat ? image : "/group.svg"}

@@ -12,8 +12,6 @@ function GroupChatUI({ cachedData }: Props) {
           index > 0 &&
           cachedData.messages[index - 1].sender?._id === item.sender?._id;
 
-        console.log(item, "ITEM");
-
         return (
           <li
             key={index}

@@ -1,16 +1,38 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Socket } from "socket.io-client";
 import Chatpage from "../components/Chatpage";
 import GroupChatModal from "../components/GroupChatModal";
 import Navbar from "../components/Navbar";
 import Profile from "../components/Profile";
 import UsersListSideBar from "../components/UsersListSideBar";
+import { useAuth } from "../hooks/useAuth";
+import { initSocket } from "../lib/Socket";
 
 const Chats = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showProfile, setShowProfile] = useState<boolean>(false);
   const [currentChat, setCurrentChat] = useState<string>("");
   const [otherUser, setOtherUser] = useState<string>("");
+  const [isGroupChat, setIsGroupChat] = useState<boolean>(false);
+  const { user, initiateOnlineUsers } = useAuth();
+
+  let socket: Socket | null = null;
+  console.log(isGroupChat, "isGroupChat");
+
+  useEffect(() => {
+    if (user && (!socket || !socket.connected)) {
+      console.log(user._id, "userID");
+      socket = initSocket(user._id);
+      socket.connect();
+
+      socket.on("getOnlineUsers", (userIds: string[]) => {
+        initiateOnlineUsers(userIds);
+        console.log("ONLINE USERS", userIds);
+      });
+    }
+  }, [user]);
+
   return (
     <div className="relative w-full h-full">
       <Navbar setShowProfile={setShowProfile} />
@@ -23,9 +45,14 @@ const Chats = () => {
           setShowModal={setShowModal}
           setCurrentChat={setCurrentChat}
           setOtherUser={setOtherUser}
+          setIsGroupChat={setIsGroupChat}
         />
 
-        <Chatpage currentChat={currentChat} otherUser={otherUser} />
+        <Chatpage
+          currentChat={currentChat}
+          otherUser={otherUser}
+          isGroupChat={isGroupChat}
+        />
       </div>
 
       {showModal && (

@@ -16,7 +16,7 @@ const getMessages = async (chatId: string) => {
 
   return res.data;
 };
-const useGetMessages = (chatId: string | null) => {
+const useGetMessages = (chatId: string | null, otherUser: string | null) => {
   console.log(chatId, "<><><><>CHATID");
   const queryClient = useQueryClient();
   const { data, isError, isFetched, isLoading } = useQuery({
@@ -33,7 +33,9 @@ const useGetMessages = (chatId: string | null) => {
     if (!socket) return;
 
     socket.on("newMessage", (newMessage) => {
-      console.log("new message received", newMessage);
+      //optimisation for if it is sender and selected user are same, so chat wont go some other elses chatdata;
+      console.log("senderid", newMessage.sender._id);
+      if (otherUser !== newMessage.sender._id) return;
       queryClient.setQueryData(["messages", chatId], (oldData: any) => {
         if (!oldData) return { messages: [newMessage] };
 

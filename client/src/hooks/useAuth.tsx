@@ -33,6 +33,7 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (user && (!socket || !socket.connected)) {
+      console.log(user._id, "userID");
       socket = initSocket(user._id);
       socket.connect();
 
@@ -76,6 +77,10 @@ export const useAuth = () => {
     navigate("/");
   };
 
+  const initiateOnlineUsers = (data: any) => {
+    setOnlineUsers(data);
+  };
+
   return {
     user,
     isLoading,
@@ -85,5 +90,6 @@ export const useAuth = () => {
     loginStatus: loginMutation.status,
     logout,
     onlineUsers,
+    initiateOnlineUsers,
   };
 };

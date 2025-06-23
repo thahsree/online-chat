@@ -71,6 +71,67 @@ const sendMessage = async (req, res) => {
   }
 };
 
+const sendGroupChatMessage = async (req, res) => {
+  console.log("group chat triggered");
+  try {
+    const { content, chatId } = req.body;
+
+    if (!content || !chatId) {
+      return res
+        .status(404)
+        .json({ message: "Invalid data passed into request" });
+    }
+
+    var newMessage = {
+      sender: req.user._id,
+      content: content,
+      chat: chatId,
+    };
+
+    const chat = await Chat.findOne({ _id: chatId });
+
+    const newData = {
+      sender: { _id: req.user._id },
+      content,
+      updatedAt: new Date(),
+      chat: {
+        _id: chatId,
+        users: chat.users,
+      },
+    };
+
+    var message = await Message.create(newMessage);
+
+    const receiversSocketIds = chat.users
+      .filter((id) => id.toString() !== req.user._id.toString()) //to exclude sender
+      .map((id) => getReceiverSocketId(id)) // get socket IDs
+      .filter(Boolean); //to remove undefines;
+
+    if (receiversSocketIds) {
+      receiversSocketIds.forEach((id) => {
+        io.to(id).emit("groupMessage", newData);
+      });
+    }
+
+    // use of execPopulate because we are populating instace of mongoose class
+    message = await message.populate("sender", "user picture"); //populating sender with userand picture
+    message = await message.populate("chat");
+    message = await User.populate(message, {
+      path: "chat.users",
+      select: "userName email picture",
+    });
+    message = await message.populate("chat.latestMessages");
+
+    //updating latest message.
+    await Chat.findByIdAndUpdate(req.body.chatId, {
+      latestMessages: message,
+    });
+
+    res.json(message);
+  } catch (error) {
+    res.status(501).json({ message: "internal server error" });
+  }
+};
 const fetchMessage = async (req, res) => {
   try {
     const messages = await Message.find({ chat: req.params.chatId }).populate(
@@ -103,4 +164,9 @@ const fetchMessage = async (req, res) => {
   }
 };
 
-module.exports = { getAllChats, sendMessage, fetchMessage };
+module.exports = {
+  getAllChats,
+  sendMessage,
+  fetchMessage,
+  sendGroupChatMessage,
+};

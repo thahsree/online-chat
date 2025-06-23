@@ -10,18 +10,18 @@ import { SenderUI } from "./SenderUI";
 interface Props {
   currentChat: string;
   otherUser: string;
+  isGroupChat: boolean;
 }
 
-const Chatpage = ({ currentChat, otherUser }: Props) => {
+const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
   const queryClient = useQueryClient();
-  const { data: chatData, isLoading } = useGetMessages(currentChat);
+  const { data: chatData, isLoading } = useGetMessages(currentChat, otherUser);
 
   const user = JSON.parse(localStorage.getItem("loggedUser") || "{}");
 
   const [message, setMessage] = useState<string>("");
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
-  console.log(chatData, "chatdata<<<>>>>");
 
   const handleSendMessage = async (e: any) => {
     if (e.key == "Enter" || e.keycode == 13 || e.type == "click") {
@@ -36,19 +36,36 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
       console.log(token, "TOKEN");
 
       try {
-        const res = await axios.post(
-          `${PORT}/message`,
-          {
-            content: message,
-            chatId: currentChat,
-            receiver: otherUser,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
+        let res;
+        if (isGroupChat) {
+          res = await axios.post(
+            `${PORT}/message/groupChat`,
+            {
+              content: message,
+              chatId: currentChat,
             },
-          }
-        );
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        } else {
+          res = await axios.post(
+            `${PORT}/message`,
+            {
+              content: message,
+              chatId: currentChat,
+              receiver: otherUser,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        }
+
         if (!res) {
           alert("failed to send");
         } else {
