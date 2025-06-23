@@ -34,12 +34,22 @@ const sendMessage = async (req, res) => {
       chat: chatId,
     };
 
+    const newData = {
+      sender: { _id: req.user._id },
+      content,
+      updatedAt: new Date(),
+      chat: {
+        _id: chatId,
+        users: [req.user._id, receiver],
+      },
+    };
+
     var message = await Message.create(newMessage);
 
     const receiverSocketId = getReceiverSocketId(receiver);
 
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newMessage", newMessage);
+      io.to(receiverSocketId).emit("newMessage", newData);
     }
 
     // use of execPopulate because we are populating instace of mongoose class
@@ -63,19 +73,33 @@ const sendMessage = async (req, res) => {
 
 const fetchMessage = async (req, res) => {
   try {
-    const chat = await Message.find({ chat: req.params.chatId }).populate(
+    const messages = await Message.find({ chat: req.params.chatId }).populate(
       "sender"
-    );
+    ); // don't populate chat in each message
+
+    if (!messages || messages.length === 0) {
+      return res.status(404).json({
+        message: "No messages found for this chatId",
+      });
+    }
+
+    const chatId = req.params.chatId;
+    const Chat = require("../model/chatModel");
+    const chat = await Chat.findById(chatId).populate("users");
 
     if (!chat) {
       return res.status(404).json({
-        message: "invalid chatID or chatID not provided",
+        message: "Chat not found",
       });
     }
-    return res.status(200).json(chat);
+
+    return res.status(200).json({
+      chat,
+      messages,
+    });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ messsage: "Internal server error" });
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 

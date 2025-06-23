@@ -16,12 +16,11 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
   const queryClient = useQueryClient();
   const { data: chatData, isLoading } = useGetMessages(currentChat);
 
-  const chatName = chatData?.length ? chatData[0].chat.chatName : "Unknown";
-
   const user = JSON.parse(localStorage.getItem("loggedUser") || "{}");
 
   const [message, setMessage] = useState<string>("");
 
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
   console.log(chatData, "chatdata<<<>>>>");
 
   const handleSendMessage = async (e: any) => {
@@ -33,9 +32,8 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
       }
 
       const PORT = import.meta.env.VITE_BASE_URL;
-      const storedUser = localStorage.getItem("userCredentials");
-
-      const token = storedUser ? JSON.parse(storedUser) : null;
+      const token = JSON.parse(localStorage.getItem("userCredentials") || "{}");
+      console.log(token, "TOKEN");
 
       try {
         const res = await axios.post(
@@ -84,12 +82,11 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
   };
 
   // widow scroll down
-  const chatEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView();
     }
-  }, [chatData]);
+  }, [chatData?.messages]);
   if (!chatData) {
     return (
       <div className="w-full bg-[#2c2a2a] flex flex-col justify-center items-center py-2 px-5">
@@ -100,12 +97,14 @@ const Chatpage = ({ currentChat, otherUser }: Props) => {
 
   return (
     <div className="w-full h-full relative">
-      {chatName !== "sender" && <GroupChatNavBar cachedData={chatData} />}
+      {chatData?.chat.chatName !== "sender" && (
+        <GroupChatNavBar cachedData={chatData.chat} />
+      )}
       <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-end py-2 px-5 overflow-hidden">
         <div className="overflow-auto">
-          {chatName === "sender" ? (
-            chatData && <SenderUI cachedData={chatData} />
-          ) : chatName.length > 1 ? (
+          {chatData?.chat.chatName === "sender" ? (
+            <SenderUI cachedData={chatData} />
+          ) : chatData?.chat.chatName.length > 1 ? (
             <GroupChatUI cachedData={chatData} />
           ) : (
             <p>Loading...</p>

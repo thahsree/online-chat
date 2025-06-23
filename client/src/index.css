@@ -29,6 +29,12 @@ input[type=password]::-ms-clear
   color:black;
   font-weight: 500;
 }
+html,
+:host {
+     text-size-adjust: 100%;
+-webkit-text-size-adjust: 100%;
+}
+
 .bg{
 
   position:fixed;

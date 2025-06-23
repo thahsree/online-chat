@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
-import { createSocket } from "../lib/Socket";
+import { disconnectSocket, initSocket } from "../lib/Socket";
 
 const PORT = import.meta.env.VITE_BASE_URL;
 let socket: Socket | null = null;
@@ -33,7 +33,7 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (user && (!socket || !socket.connected)) {
-      socket = createSocket(user._id);
+      socket = initSocket(user._id);
       socket.connect();
 
       socket.on("getOnlineUsers", (userIds: string[]) => {
@@ -48,6 +48,7 @@ export const useAuth = () => {
       const res = await axios.post(`${PORT}/users/login`, formData);
       const user = res.data.userData._doc;
       const { password, ...cleanedUser } = user;
+      console.log(res.data.token);
       localStorage.setItem("userCredentials", JSON.stringify(res.data.token));
       localStorage.setItem("loggedUser", JSON.stringify(cleanedUser));
 
@@ -58,12 +59,6 @@ export const useAuth = () => {
       alert("User logged in");
       console.log(user, "USER<<<<");
       navigate("/chats");
-
-      //check already connected to socket
-      if (!socket || !socket.connected) {
-        socket = createSocket(user._id);
-        socket.connect();
-      }
     },
     onError: (err: any) => {
       alert(err.response?.data?.message || "Login failed");
@@ -75,7 +70,7 @@ export const useAuth = () => {
     localStorage.removeItem("userCredentials");
     localStorage.removeItem("loggedUser");
     if (socket) {
-      socket.disconnect();
+      disconnectSocket();
     }
     queryClient.removeQueries({ queryKey: ["authUser"] });
     navigate("/");

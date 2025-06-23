@@ -8,7 +8,7 @@ const {
 
 const router = express.Router();
 
-router.get("/:chatId", verifyToken, getAllChats);
+router.get("/:chatId", verifyToken, fetchMessage);
 
 router.post("/", verifyToken, sendMessage);
 

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const PORT = import.meta.env.VITE_BASE_URL;
-const token = JSON.parse(localStorage.getItem("userCredentials") || "");
+const token = JSON.parse(localStorage.getItem("userCredentials") || "{}");
 
 const fetchChats = async () => {
   if (token) {
