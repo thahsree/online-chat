@@ -1,10 +1,14 @@
+import { useEffect } from "react";
+
 interface Props {
   cachedData: any;
 }
 function GroupChatUI({ cachedData }: Props) {
-  console.log("cached Data", cachedData);
   const user = JSON.parse(localStorage.getItem("loggedUser") || "{}");
 
+  useEffect(() => {
+    console.log("cached Data", cachedData);
+  }, [cachedData]);
   return (
     <ul className="flex flex-col mb-5 gap-2">
       {cachedData?.messages.map((item: any, index: number) => {

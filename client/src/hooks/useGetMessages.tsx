@@ -50,6 +50,33 @@ const useGetMessages = (chatId: string | null, otherUser: string | null) => {
       socket.off("newMessage");
     };
   });
+
+  useEffect(() => {
+    const socket = getSocket();
+    console.log(socket, "socket");
+    if (!chatId) return;
+
+    if (!socket) return;
+
+    socket.on("groupMessage", (newMessage) => {
+      //optimisation
+
+      console.log("new Group Chat received", newMessage);
+      if (chatId !== newMessage.chat) return;
+      queryClient.setQueryData(["messages", chatId], (oldData: any) => {
+        if (!oldData) return { messages: [newMessage] };
+
+        return {
+          ...oldData,
+          messages: [...oldData.messages, newMessage],
+        };
+      });
+    });
+
+    return () => {
+      socket.off("groupMessage");
+    };
+  });
   return {
     data,
     isError,

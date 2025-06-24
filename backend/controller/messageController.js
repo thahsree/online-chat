@@ -89,15 +89,14 @@ const sendGroupChatMessage = async (req, res) => {
     };
 
     const chat = await Chat.findOne({ _id: chatId });
+    const sender = await User.findOne({ _id: req.user._id });
 
     const newData = {
-      sender: { _id: req.user._id },
+      sender,
       content,
       updatedAt: new Date(),
-      chat: {
-        _id: chatId,
-        users: chat.users,
-      },
+      chat: chatId,
+      users: chat.users,
     };
 
     var message = await Message.create(newMessage);
@@ -116,10 +115,10 @@ const sendGroupChatMessage = async (req, res) => {
     // use of execPopulate because we are populating instace of mongoose class
     message = await message.populate("sender", "user picture"); //populating sender with userand picture
     message = await message.populate("chat");
-    message = await User.populate(message, {
-      path: "chat.users",
-      select: "userName email picture",
-    });
+    // message = await User.populate(message, {
+    //   path: "chat.users",
+    //   select: "userName email picture",
+    // });
     message = await message.populate("chat.latestMessages");
 
     //updating latest message.
