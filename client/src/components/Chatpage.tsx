@@ -82,8 +82,8 @@ const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
           queryClient.setQueryData(
             ["messages", currentChat],
             (oldData: any) => ({
-              ...oldData,
-              messages: [...oldData.messages, newData],
+              ...(oldData || { messages: [] }),
+              messages: [...(oldData.messages || []), newData],
             })
           );
 
@@ -103,26 +103,36 @@ const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView();
     }
-  }, [chatData?.messages]);
-  if (!chatData) {
-    return (
-      <div className="w-full bg-[#2c2a2a] flex flex-col justify-center items-center py-2 px-5">
-        No Data Found
-      </div>
-    );
-  }
+  }, [chatData?.messages?.length]);
+  // if (!chatData) {
+  //   return (
+  //     <div className="w-full bg-[#2c2a2a] flex flex-col justify-center items-center py-2 px-5">
+  //       No Data Found
+  //     </div>
+  //   );
+  // }
+
+  console.log(chatData, "CHAT DATA new");
 
   return (
     <div className="w-full h-full relative">
-      {chatData?.chat.chatName !== "sender" && (
-        <GroupChatNavBar cachedData={chatData.chat} />
-      )}
+      {isGroupChat && <GroupChatNavBar cachedData={chatData?.chat} />}
       <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-end py-2 px-5 overflow-hidden">
         <div className="overflow-auto">
-          {chatData?.chat.chatName === "sender" ? (
-            <SenderUI cachedData={chatData} />
-          ) : chatData?.chat.chatName.length > 1 ? (
-            <GroupChatUI cachedData={chatData} />
+          {!isGroupChat ? (
+            chatData?.messages?.length ? (
+              <SenderUI cachedData={chatData} />
+            ) : (
+              <p className="text-white text-center py-4">No messages yet.</p>
+            )
+          ) : chatData?.chat.chatName?.length > 1 ? (
+            chatData?.messages?.length ? (
+              <GroupChatUI cachedData={chatData} />
+            ) : (
+              <p className="text-white text-center py-4">
+                No messages in group chat
+              </p>
+            )
           ) : (
             <p>Loading...</p>
           )}

@@ -133,29 +133,19 @@ const sendGroupChatMessage = async (req, res) => {
 };
 const fetchMessage = async (req, res) => {
   try {
-    const messages = await Message.find({ chat: req.params.chatId }).populate(
-      "sender"
-    ); // don't populate chat in each message
-
-    if (!messages || messages.length === 0) {
-      return res.status(404).json({
-        message: "No messages found for this chatId",
-      });
-    }
-
-    const chatId = req.params.chatId;
-    const Chat = require("../model/chatModel");
-    const chat = await Chat.findById(chatId).populate("users");
-
+    const chat = await Chat.findById(req.params.chatId).populate("users");
     if (!chat) {
       return res.status(404).json({
-        message: "Chat not found",
+        message: "NO chat found",
       });
     }
+    const messages = await Message.find({ chat: req.params.chatId }).populate(
+      "sender"
+    );
 
     return res.status(200).json({
       chat,
-      messages,
+      messages: messages || [],
     });
   } catch (error) {
     console.error(error);

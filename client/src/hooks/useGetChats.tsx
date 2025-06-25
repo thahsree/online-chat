@@ -17,6 +17,18 @@ const fetchChats = async () => {
   }
 };
 
+const createChat = async (users: string[] | null) => {
+  if (users) {
+    const res = axios.post(`${PORT}/chats/group`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res;
+  }
+};
+
 const useGetChats = () => {
   const { data, isError, isFetched, isLoading } = useQuery({
     queryKey: ["chats"],
@@ -29,6 +41,7 @@ const useGetChats = () => {
     isLoading,
     data,
     isFetched,
+    createChat,
   };
 };
 

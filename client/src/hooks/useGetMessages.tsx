@@ -14,6 +14,8 @@ const getMessages = async (chatId: string) => {
     },
   });
 
+  console.log(res, "messages");
+
   return res.data;
 };
 const useGetMessages = (chatId: string | null, otherUser: string | null) => {
@@ -40,8 +42,8 @@ const useGetMessages = (chatId: string | null, otherUser: string | null) => {
         if (!oldData) return { messages: [newMessage] };
 
         return {
-          ...oldData,
-          messages: [...oldData.messages, newMessage],
+          ...(oldData || { messages: [] }),
+          messages: [...(oldData.messages || []), newMessage],
         };
       });
     });
