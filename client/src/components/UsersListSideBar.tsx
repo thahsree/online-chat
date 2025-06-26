@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 import useGetChats from "../hooks/useGetChats";
 import Loading from "./Loading";
 
@@ -7,6 +7,8 @@ interface Props {
   setCurrentChat: React.Dispatch<React.SetStateAction<string>>;
   setOtherUser: React.Dispatch<React.SetStateAction<string>>;
   setIsGroupChat: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowSideBar: React.Dispatch<SetStateAction<boolean>>;
+  showSideBar: boolean;
 }
 
 function UsersListSideBar({
@@ -14,6 +16,8 @@ function UsersListSideBar({
   setCurrentChat,
   setOtherUser,
   setIsGroupChat,
+  showSideBar,
+  setShowSideBar,
 }: Props) {
   const { data, isLoading } = useGetChats();
 
@@ -41,8 +45,14 @@ function UsersListSideBar({
     setIsGroupChat(isGroupChat);
   };
 
+  console.log(showSideBar, "showsidebar");
+
   return (
-    <div className="flex flex-col justify-between w-[35%] bg-[#2c2a2a6d]">
+    <div
+      className={`flex flex-col justify-between w-[35%] bg-[#2c2a2a6d] max-sm:absolute max-sm:bg-black max-sm:w-[60%] ${
+        showSideBar && "flex z-50"
+      }`}
+    >
       <div className="w-full flex items-center flex-col px-5 ">
         <div className="flex justify-between w-full py-4 items-center">
           <div>My Chats</div>
@@ -62,7 +72,12 @@ function UsersListSideBar({
                 <li
                   key={index}
                   className="flex gap-3 bg-[#2c2a2a] p-2 rounded text-sm font-normal items-center"
-                  onClick={() => accessChat(item._id, id, item.isGroupChat)}
+                  onClick={() => {
+                    if (showSideBar && typeof setShowSideBar === "function") {
+                      setShowSideBar(false);
+                    }
+                    accessChat(item._id, id, item.isGroupChat);
+                  }}
                 >
                   <img
                     src={!item.isGroupChat ? image : "/group.svg"}

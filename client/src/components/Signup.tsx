@@ -8,7 +8,7 @@ interface MyComponentProps {
 const Signup: React.FC<MyComponentProps> = ({ setIsActive }) => {
   const [showPass, setShowPass] = useState<boolean>(false);
   const [showCPass, setShowCPass] = useState<boolean>(false);
-  const [image, setImage] = useState<string>("");
+  const [image, setImage] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -44,13 +44,18 @@ const Signup: React.FC<MyComponentProps> = ({ setIsActive }) => {
         setShowPass(true);
         return;
       }
-      const dataToSend = {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-      };
+      const dataToSend = new FormData();
 
-      const res = await axios.post(`${PORT}/users/register`, dataToSend);
+      dataToSend.append("username", formData.username);
+      dataToSend.append("email", formData.email);
+      dataToSend.append("password", formData.password);
+
+      if (image) {
+        dataToSend.append("image", image);
+      }
+      const res = await axios.post(`${PORT}/users/register`, dataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       console.log("Response", res);
       alert("Signup completed");
@@ -135,7 +140,18 @@ const Signup: React.FC<MyComponentProps> = ({ setIsActive }) => {
         <label htmlFor="upload" className="text-white mt-3">
           Upload your picture
         </label>
-        <input type="file" id="upload" className="bg-transparent text-white" />
+        <input
+          type="file"
+          id="upload"
+          className="bg-transparent text-white"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              setImage(file);
+            }
+          }}
+        />
 
         <button className="border mt-3 bg-blue-600 rounded-lg py-2  border-transparent font-semibold">
           Signup

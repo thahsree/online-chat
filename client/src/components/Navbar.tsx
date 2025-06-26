@@ -2,11 +2,18 @@ import React, { SetStateAction } from "react";
 
 type Props = {
   setShowProfile: React.Dispatch<SetStateAction<boolean>>;
+  setShowSideBar: React.Dispatch<SetStateAction<boolean>>;
 };
-const Navbar = ({ setShowProfile }: Props) => {
+const Navbar = ({ setShowProfile, setShowSideBar }: Props) => {
   return (
-    <>
-      <div className="flex bg-[#2c2a2a] w-full h-[70px] items-center justify-center px-5 border-b border-[#565555cb]">
+    <div className="relative bg-[#2c2a2a] w-full">
+      <div
+        className="absolute left-1 top-[30%] hidden max-sm:flex"
+        onClick={() => setShowSideBar((prev) => !prev)}
+      >
+        ham
+      </div>
+      <div className="flex  w-full h-[70px] items-center justify-center px-5 border-b border-[#565555cb]">
         <h3 className="text-4xl font-light font-mono text-white text-center">
           CHIT CHAT
         </h3>
@@ -26,7 +33,7 @@ const Navbar = ({ setShowProfile }: Props) => {
           </g>
         </svg>
       </div>
-    </>
+    </div>
   );
 };
 

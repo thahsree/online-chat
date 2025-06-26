@@ -104,13 +104,13 @@ const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
       chatEndRef.current.scrollIntoView();
     }
   }, [chatData?.messages?.length]);
-  // if (!chatData) {
-  //   return (
-  //     <div className="w-full bg-[#2c2a2a] flex flex-col justify-center items-center py-2 px-5">
-  //       No Data Found
-  //     </div>
-  //   );
-  // }
+  if (!chatData) {
+    return (
+      <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-center items-center py-2 px-5">
+        No Data Found
+      </div>
+    );
+  }
 
   console.log(chatData, "CHAT DATA new");
 
@@ -118,7 +118,7 @@ const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
     <div className="w-full h-full relative">
       {isGroupChat && <GroupChatNavBar cachedData={chatData?.chat} />}
       <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-end py-2 px-5 overflow-hidden">
-        <div className="overflow-auto">
+        <div className="overflow-auto scrollbar-hide">
           {!isGroupChat ? (
             chatData?.messages?.length ? (
               <SenderUI cachedData={chatData} />

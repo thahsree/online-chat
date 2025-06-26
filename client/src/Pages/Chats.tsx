@@ -16,6 +16,7 @@ const Chats = () => {
   const [otherUser, setOtherUser] = useState<string>("");
   const [isGroupChat, setIsGroupChat] = useState<boolean>(false);
   const { user, initiateOnlineUsers } = useAuth();
+  const [showSideBar, setShowSideBar] = useState<boolean>(false);
 
   let socket: Socket | null = null;
   console.log(isGroupChat, "isGroupChat");
@@ -35,17 +36,18 @@ const Chats = () => {
 
   return (
     <div className="relative w-full h-full">
-      <Navbar setShowProfile={setShowProfile} />
+      <Navbar setShowProfile={setShowProfile} setShowSideBar={setShowSideBar} />
       {showProfile && <Profile />}
       <div
         style={{ height: "calc(100vh - 70px)" }}
-        className="flex w-full max-md:flex-col max-sm:h-full"
+        className="flex w-full max-sm:h-full max-sm:relative"
       >
         <UsersListSideBar
           setShowModal={setShowModal}
           setCurrentChat={setCurrentChat}
           setOtherUser={setOtherUser}
           setIsGroupChat={setIsGroupChat}
+          showSideBar={showSideBar}
         />
 
         <Chatpage

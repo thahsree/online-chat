@@ -1,6 +1,7 @@
 const generateToken = require("../config/generateToken");
 const User = require("../model/userModel");
 const bcrypt = require("bcrypt");
+const upload = require("../config/upload");
 
 const login = async (req, res) => {
   try {
@@ -41,11 +42,14 @@ const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(password, salt);
 
+    const imageurl = req.file ? req.file.path : "";
+    console.log("image", imageurl);
+
     const newUser = {
       password: hashedPass,
       userName: username,
       email,
-      image,
+      image: imageurl,
     };
 
     const user = await User.create(newUser);
