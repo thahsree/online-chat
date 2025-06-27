@@ -47,6 +47,7 @@ const Chats = () => {
           setCurrentChat={setCurrentChat}
           setOtherUser={setOtherUser}
           setIsGroupChat={setIsGroupChat}
+          setShowSideBar={setShowSideBar}
           showSideBar={showSideBar}
         />
 
@@ -62,7 +63,7 @@ const Chats = () => {
           initial={{ opacity: 0, y: -500, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
-          className="bg-white w-[500px] h-[500px] flex absolute top-[20%] left-[30%] flex-col"
+          className="p-2 w-[500px] h-[500px] flex absolute top-[20%] left-[30%] bg-[#3a3a3a] z-40 border border-[#c0c0c09d] flex-col max-sm:left-[10%] max-sm:w-[80%] max-sm:h-[70%]"
         >
           {showModal && <GroupChatModal setShowModal={setShowModal} />}
         </motion.div>
