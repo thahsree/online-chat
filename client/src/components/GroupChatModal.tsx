@@ -63,7 +63,8 @@ function GroupChatModal({ setShowModal }: Props) {
             type="text"
             onChange={(e) => setGroupName(e.target.value)}
             placeholder="Enter Group Name"
-            className="rounded py-1 w-full bg-[#2c2a2a] caret-white border border-[#c0c0c057]"
+            className="pl-1 rounded py-1 w-full bg-[#2c2a2a] caret-white border border-[#c0c0c057]"
+            autoFocus
           />
         </div>
         <div className="flex flex-col gap-2">
