@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import useGetChats from "../hooks/useGetChats";
 
 interface Props {
@@ -5,8 +6,31 @@ interface Props {
 }
 
 function GroupChatModal({ setShowModal }: Props) {
-  const { data } = useGetChats();
-  console.log(data, "USERS FROM MODEL");
+  const [groupName, setGroupName] = useState<string>("");
+  const [users, setUsers] = useState<string[]>([]);
+  const { data, createGroupChat } = useGetChats();
+
+  const submitForm = () => {
+    if (!groupName.trim() || users.length < 2) {
+      alert("please add groupname and atleast one users");
+      return;
+    }
+    createGroupChat(users, groupName);
+    setShowModal(false);
+  };
+
+  const toggleUsersFromGroup = (id: string) => {
+    if (users?.includes(id)) {
+      const res = users.filter((userId) => userId !== id);
+      setUsers(res);
+    } else {
+      setUsers((prev) => [...(prev || []), id]);
+    }
+  };
+
+  useEffect(() => {
+    console.log(users);
+  }, [users]);
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser") || "{}");
   const getSenderDetails = (users: any) => {
     if (!loggedUser) return { name: "", id: "", image: "" };
@@ -28,7 +52,7 @@ function GroupChatModal({ setShowModal }: Props) {
           </h3>
           <button
             onClick={() => setShowModal(false)}
-            className="rounded-full w-[50px] h-[50px] max-sm:w-[25px] max-sm:h-[25px]"
+            className="rounded-full w-[50px] h-[50px] max-sm:w-[25px] max-sm:h-[25px] outline-none"
           >
             <img src="/close.svg" alt="" className="w-full h-full" />
           </button>
@@ -37,21 +61,35 @@ function GroupChatModal({ setShowModal }: Props) {
           <p>Group Name</p>
           <input
             type="text"
+            onChange={(e) => setGroupName(e.target.value)}
             placeholder="Enter Group Name"
-            className="rounded py-1 w-full bg-[#2c2a2a] caret-white border border-[#c0c09d]"
+            className="rounded py-1 w-full bg-[#2c2a2a] caret-white border border-[#c0c0c057]"
           />
         </div>
         <div className="flex flex-col gap-2">
           <p>ADD MEMBERS</p>
 
-          <ul className="flex flex-wrap items-center justify-center  flex-col bg-red-50 w-full overflow-auto">
-            {data.map((item: any) => {
+          <ul className="flex flex-wrap items-center justify-center  flex-col gap-1 w-full overflow-auto">
+            {data.map((item: any, index: number) => {
               if (!item.isGroupChat) {
                 const sender = getSenderDetails(item.users);
 
                 return (
-                  <li className="text-start px-15 py-4 w-full bg-red-500">
-                    {sender.name}
+                  <li
+                    className="text-start h-[50px] flex justify-between items-center pl-3 pr-3 py-2 w-full bg-[#2c2a2ae0] border border-[#c0c0c057]"
+                    onClick={() => toggleUsersFromGroup(sender.id)}
+                    key={index}
+                  >
+                    <p>{sender.name}</p>
+                    <div className="h-[30px] w-[30px]  rounded-full cursor-pointer">
+                      <img
+                        src={`${
+                          users?.includes(sender.id) ? "minus.svg" : "/add.svg"
+                        }`}
+                        alt=""
+                        className="w-full h-full"
+                      />
+                    </div>
                   </li>
                 );
               }
@@ -59,7 +97,10 @@ function GroupChatModal({ setShowModal }: Props) {
           </ul>
         </div>
       </div>
-      <button className="bg-[#2c2a2a] py-3 px-6 rounded border border-[#c0c0c09d] ">
+      <button
+        onClick={submitForm}
+        className="bg-[#2c2a2a] py-3 px-6 rounded border border-[#c0c0c09d] "
+      >
         CREATE GROUP
       </button>
     </div>

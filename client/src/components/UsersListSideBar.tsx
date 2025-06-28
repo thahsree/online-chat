@@ -49,22 +49,24 @@ function UsersListSideBar({
 
   return (
     <div
-      className={`flex flex-col justify-between w-[35%] bg-[#2c2a2a6d] max-sm:absolute max-sm:bg-black max-sm:w-[60%] ${
+      className={`flex flex-col justify-between w-[35%] h-[full] bg-[#2c2a2a6d] max-sm:absolute max-sm:bg-black max-sm:w-[60%] overflow-y-hidden ${
         showSideBar && "flex z-50"
       }`}
     >
-      <div className="w-full flex items-center flex-col px-5 ">
+      <div className="w-full flex items-center flex-col px-5 overflow-y-auto custom-scrollbar ">
         <div className="flex justify-between w-full py-4 items-center">
-          <div>My Chats</div>
+          <div>
+            <h5 className="font-bold">My Chats</h5>
+          </div>
           <div
             onClick={() => setShowModal((prev: any) => !prev)}
             className="p-1 bg-white text-black border rounded border-transparent"
           >
-            New Group Chat
+            <h3 className="font-semibold">New Group Chat</h3>
           </div>
         </div>
 
-        <ul className="w-full flex flex-col gap-2 mt-3 ">
+        <ul className="w-full flex flex-col gap-2 mt-3">
           {data ? (
             data.map((item: any, index: number) => {
               const { name, id, image } = getSenderDetails(item.users);

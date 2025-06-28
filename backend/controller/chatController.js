@@ -81,11 +81,12 @@ const fetchChats = async (req, res) => {
 const createGroupChat = async (req, res) => {
   try {
     console.log(req.user, "USER REQ");
+    console.log(req.body);
     if (!req.body.users || !req.body.name) {
       return res.status(404).json({ message: "please add required fields" });
     }
 
-    const users = JSON.parse(req.body.users);
+    const users = req.body.users;
 
     if (users.length < 2) {
       return res.status(404).json({ message: "min 2 users required" });
