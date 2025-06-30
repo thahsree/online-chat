@@ -8,6 +8,7 @@ interface Props {
   setOtherUser: React.Dispatch<React.SetStateAction<string>>;
   setIsGroupChat: React.Dispatch<React.SetStateAction<boolean>>;
   setShowSideBar: React.Dispatch<SetStateAction<boolean>>;
+  setFindAllUsers: React.Dispatch<SetStateAction<boolean>>;
   showSideBar: boolean;
 }
 
@@ -18,6 +19,7 @@ function UsersListSideBar({
   setIsGroupChat,
   showSideBar,
   setShowSideBar,
+  setFindAllUsers,
 }: Props) {
   const { data, isLoading } = useGetChats();
 
@@ -99,7 +101,10 @@ function UsersListSideBar({
         </ul>
       </div>
 
-      <div className="p-5 flex items-center">
+      <div
+        className="p-5 flex items-center"
+        onClick={() => setFindAllUsers((prev) => !prev)}
+      >
         <div className="w-full flex gap-2 p-3 bg-[#2c2a2a] text-center items-center justify-center">
           <div className="w-[25px] h-[25px]">
             <img src="/global.svg" alt="" className="w-full h-full" />

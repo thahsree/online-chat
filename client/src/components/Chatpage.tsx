@@ -145,6 +145,7 @@ const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
             onKeyDown={handleSendMessage}
             onChange={(e: any) => setMessage(e.target.value)}
             value={message}
+            autoFocus
           />
           <button
             className="absolute top-[25%] right-3 border-none outline-none"
