@@ -11,9 +11,16 @@ function GroupChatModal({ setShowModal }: Props) {
   const { data, createGroupChat } = useGetChats();
 
   const submitForm = () => {
-    if (!groupName.trim() || users.length < 2) {
-      alert("please add groupname and atleast one users");
+    if (!groupName.trim() && users.length < 2) {
+      alert(
+        "please add groupname and add atleast 2 members for creating group chat"
+      );
       return;
+    } else if (!groupName.trim()) {
+      alert("please add groupname");
+      return;
+    } else if (users.length < 2) {
+      alert(" atleast two users needed for creating a group chat");
     }
     createGroupChat(users, groupName);
     setShowModal(false);
