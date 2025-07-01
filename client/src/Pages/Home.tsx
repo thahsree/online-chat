@@ -16,7 +16,7 @@ const Home = () => {
   }, [isUser]);
 
   return (
-    <div className="w-[100vw] h-[100vh] flex pt-6 justify-center">
+    <div className="w-[100vw] h-[100vh] flex pt-6 justify-center bg-[#2c2a2abd]">
       {/* Content */}
       <div className="flex w-[500px] flex-col gap-5 relative z-10 ">
         {/* Header */}

@@ -1,12 +1,11 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-const PORT = import.meta.env.VITE_BASE_URL;
-const token = JSON.parse(localStorage.getItem("userCredentials") || "{}");
-
 const useGetChats = () => {
   const queryClient = useQueryClient();
 
+  const PORT = import.meta.env.VITE_BASE_URL;
+  const token = JSON.parse(localStorage.getItem("userCredentials") || "{}");
   const fetchChats = async () => {
     if (token) {
       const res = await axios.get(`${PORT}/chats`, {

@@ -106,7 +106,7 @@ const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
   }, [chatData?.messages?.length]);
   if (!chatData) {
     return (
-      <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-center items-center py-2 px-5">
+      <div className="w-full h-full bg-[#2c2a2a] bg-[url('/pattern.svg')] bg-repeat flex flex-col justify-center items-center py-2 px-5">
         No Data Found
       </div>
     );
@@ -117,7 +117,7 @@ const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
   return (
     <div className="w-full h-full relative">
       {isGroupChat && <GroupChatNavBar cachedData={chatData?.chat} />}
-      <div className="w-full h-full bg-[#2c2a2a] flex flex-col justify-end py-2 px-5 overflow-hidden">
+      <div className="w-full h-full bg-[#2c2a2a] bg-[url('/pattern.svg')] flex flex-col justify-end py-2 px-5 overflow-hidden">
         <div className="overflow-auto scrollbar-hide">
           {!isGroupChat ? (
             chatData?.messages?.length ? (

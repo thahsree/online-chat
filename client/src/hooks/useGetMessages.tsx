@@ -3,11 +3,10 @@ import axios from "axios";
 import { useEffect } from "react";
 import { getSocket } from "../lib/Socket";
 
-const PORT = import.meta.env.VITE_BASE_URL;
-const token = JSON.parse(localStorage.getItem("userCredentials") || "{}");
-console.log(token, "token");
-
 const getMessages = async (chatId: string) => {
+  const PORT = import.meta.env.VITE_BASE_URL;
+  const token = JSON.parse(localStorage.getItem("userCredentials") || "{}");
+
   const res = await axios.get(`${PORT}/message/${chatId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -19,7 +18,6 @@ const getMessages = async (chatId: string) => {
   return res.data;
 };
 const useGetMessages = (chatId: string | null, otherUser: string | null) => {
-  console.log(chatId, "<><><><>CHATID");
   const queryClient = useQueryClient();
   const { data, isError, isFetched, isLoading } = useQuery({
     queryKey: ["messages", chatId],

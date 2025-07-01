@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const PORT = import.meta.env.VITE_BASE_URL;
-const token = JSON.parse(localStorage.getItem("userCredentials") || "{}");
-
 interface searchUserProps {
   keyword: string;
 }
 
 const searchUser = async ({ keyword }: searchUserProps) => {
+  const PORT = import.meta.env.VITE_BASE_URL;
+  const token = JSON.parse(localStorage.getItem("userCredentials") || "{}");
+
   const { data } = await axios.get(
     `${PORT}/users?search=${encodeURIComponent(keyword)}`,
     {
