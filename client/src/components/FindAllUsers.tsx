@@ -44,14 +44,14 @@ const FindAllUsers = ({ setFindAllUsers }: Props) => {
           data.map((item: any) => (
             <div
               key={item._id}
-              className="w-[600px] py-3 bg-[#2c2a2a] flex justify-between items-center px-5 rounded"
+              className="w-[600px] py-2 bg-[#2c2a2a] flex justify-between items-center px-5 rounded"
             >
               <div className="flex gap-3 items-center">
-                <div className="w-[30px] h-[30px] rounded-full">
+                <div className="w-[40px] h-[40px] rounded-full">
                   <img
-                    src="https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+                    src={item.picture}
                     alt=""
-                    className="w-full h-full rounded-full"
+                    className="w-full h-full rounded-full object-cover"
                   />
                 </div>
                 <p>{item.userName}</p>

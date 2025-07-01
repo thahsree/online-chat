@@ -115,44 +115,46 @@ const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
   console.log(chatData, "CHAT DATA new");
 
   return (
-    <div className="w-full h-full relative">
-      {isGroupChat && <GroupChatNavBar cachedData={chatData?.chat} />}
-      <div className="w-full h-full bg-[#2c2a2a] bg-[url('/pattern.svg')] flex flex-col justify-end py-2 px-5 overflow-hidden">
-        <div className="overflow-auto scrollbar-hide">
-          {!isGroupChat ? (
-            chatData?.messages?.length ? (
-              <SenderUI cachedData={chatData} />
+    <div className="w-full h-full">
+      <div className="w-full h-full bg-[#2c2a2a] bg-[url('/pattern.svg')] bg-repeat flex flex-col justify-between">
+        <GroupChatNavBar cachedData={chatData.chat} />
+        <div className="flex flex-col justify-end overflow-hidden">
+          <div className="overflow-auto scrollbar-hide px-2">
+            {!isGroupChat ? (
+              chatData?.messages?.length ? (
+                <SenderUI cachedData={chatData} />
+              ) : (
+                <p className="text-white text-center py-4">No messages yet.</p>
+              )
+            ) : chatData?.chat.chatName?.length > 1 ? (
+              chatData?.messages?.length ? (
+                <GroupChatUI cachedData={chatData} />
+              ) : (
+                <p className="text-white text-center py-4">
+                  No messages in group chat
+                </p>
+              )
             ) : (
-              <p className="text-white text-center py-4">No messages yet.</p>
-            )
-          ) : chatData?.chat.chatName?.length > 1 ? (
-            chatData?.messages?.length ? (
-              <GroupChatUI cachedData={chatData} />
-            ) : (
-              <p className="text-white text-center py-4">
-                No messages in group chat
-              </p>
-            )
-          ) : (
-            <p>Loading...</p>
-          )}
-          <div ref={chatEndRef} />
-        </div>
-        <div className=" bg-[#484343b5] relative">
-          <input
-            className="w-full h-[20px] border border-transparent rounded px-2 py-6 flex items-center"
-            placeholder="type your message"
-            onKeyDown={handleSendMessage}
-            onChange={(e: any) => setMessage(e.target.value)}
-            value={message}
-            autoFocus
-          />
-          <button
-            className="absolute top-[25%] right-3 border-none outline-none"
-            onClick={handleSendMessage}
-          >
-            <img src="/arrow.svg" alt="arrow" width={25} height={25} />
-          </button>
+              <p>Loading...</p>
+            )}
+            <div ref={chatEndRef} />
+          </div>
+          <div className=" bg-[#484343b5] relative">
+            <input
+              className="w-full h-[20px] border border-transparent rounded px-2 py-6 flex items-center"
+              placeholder="type your message"
+              onKeyDown={handleSendMessage}
+              onChange={(e: any) => setMessage(e.target.value)}
+              value={message}
+              autoFocus
+            />
+            <button
+              className="absolute top-[25%] right-3 border-none outline-none"
+              onClick={handleSendMessage}
+            >
+              <img src="/arrow.svg" alt="arrow" width={25} height={25} />
+            </button>
+          </div>
         </div>
       </div>
     </div>

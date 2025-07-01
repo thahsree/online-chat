@@ -49,7 +49,7 @@ const register = async (req, res) => {
       password: hashedPass,
       userName: username,
       email,
-      image: imageurl,
+      picture: imageurl,
     };
 
     const user = await User.create(newUser);
