@@ -77,7 +77,7 @@ const Chats = () => {
           initial={{ opacity: 0, y: -500, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
-          className="p-2 w-[700px] h-[700px] flex absolute top-[10%] left-[30%] bg-[#3a3a3a] z-40 border border-[#c0c0c09d] flex-col max-sm:left-[10%] max-sm:w-[80%] max-sm:h-[70%]"
+          className="w-[700px] h-[700px] flex absolute top-[10%] left-[30%] bg-[#0d0d0d] z-40 border border-[#c0c0c09d] flex-col max-sm:left-[10%] max-sm:w-[80%] max-sm:h-[70%]"
         >
           {showAllUsers && <FindAllUsers setFindAllUsers={setFindAllUsers} />}
         </motion.div>
