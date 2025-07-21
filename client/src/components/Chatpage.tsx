@@ -15,7 +15,7 @@ interface Props {
 
 const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
   const queryClient = useQueryClient();
-  const { data: chatData, isLoading } = useGetMessages(currentChat, otherUser);
+  const { data: chatData } = useGetMessages(currentChat, otherUser);
   const isThrottled = useRef(false);
 
   const user = JSON.parse(localStorage.getItem("loggedUser") || "{}");

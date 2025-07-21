@@ -1,7 +1,7 @@
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const Skeleton = () => {
+const SkeletonComponent = () => {
   return (
     <div>
       <Skeleton />
@@ -9,4 +9,4 @@ const Skeleton = () => {
   );
 };
 
-export default Skeleton;
+export default SkeletonComponent;

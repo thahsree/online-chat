@@ -1,5 +1,0 @@
-const findUser  = (id:String)=>{
-
-    
-    
-}
