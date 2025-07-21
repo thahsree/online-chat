@@ -16,6 +16,7 @@ interface Props {
 const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
   const queryClient = useQueryClient();
   const { data: chatData, isLoading } = useGetMessages(currentChat, otherUser);
+  const isThrottled = useRef(false);
 
   const user = JSON.parse(localStorage.getItem("loggedUser") || "{}");
 
@@ -24,13 +25,21 @@ const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   const handleSendMessage = async (e: any) => {
-    if (e.key == "Enter" || e.keycode == 13 || e.type == "click") {
+    if (
+      (e.key == "Enter" || e.keycode == 13 || e.type == "click") &&
+      !isThrottled.current
+    ) {
       e.preventDefault();
 
       if (!message.trim()) {
         return;
       }
 
+      isThrottled.current = true;
+      //lock the function for 1 second for preventing duplicate message
+      setTimeout(() => {
+        isThrottled.current = false;
+      }, 1000);
       const PORT = import.meta.env.VITE_BASE_URL;
       const token = JSON.parse(localStorage.getItem("userCredentials") || "{}");
       console.log(token, "TOKEN");
@@ -79,6 +88,8 @@ const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
             },
           };
 
+          setMessage("");
+
           queryClient.setQueryData(
             ["messages", currentChat],
             (oldData: any) => ({
@@ -86,10 +97,6 @@ const Chatpage = ({ currentChat, otherUser, isGroupChat }: Props) => {
               messages: [...(oldData.messages || []), newData],
             })
           );
-
-          console.log(newData);
-
-          setMessage("");
         }
       } catch (error) {
         console.log("failed to send message", error);

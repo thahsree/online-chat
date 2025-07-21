@@ -9,8 +9,6 @@ const FindAllUsers = ({ setFindAllUsers }: Props) => {
   const [keyword, setKeyword] = useState<string>("");
   const { data, isError, isLoading } = useGetUser({ keyword });
 
-  console.log(data);
-
   return (
     <div className="w-full h-full flex flex-col gap-5 py-5 items-center bg-[#2c2a2a6d] px-2">
       <div className="w-full flex justify-end">
